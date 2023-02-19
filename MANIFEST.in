@@ -1,0 +1,3 @@
+exclude tests/*
+include oarepo_model_builder_vocabularies/**/*.yaml
+include oarepo_model_builder_vocabularies/**/*.json
