@@ -1,0 +1,12 @@
+model:
+  schema-server: 'local://'
+  properties:
+    metadata:
+      properties:
+        title: keyword
+        language:
+          type: vocabulary
+          vocabulary-type: languages
+        affiliation:
+          type: taxonomy
+          vocabulary-type: affiliations

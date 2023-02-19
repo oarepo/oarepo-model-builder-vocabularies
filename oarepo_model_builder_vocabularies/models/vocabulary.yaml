@@ -1,0 +1,105 @@
+# model for invenio vocabularies, does not add any hierarchy or other features
+# just allows using the plain invenio vocabularies from custom metadata schemas
+# via lang: vocabulary{type:language, fields:[id,title]}
+model:
+  use: invenio
+  index-name: vocabulary-v1.0.0.json
+
+  marshmallow:
+    generate: false
+    schema-class: invenio_vocabularies.services.schema.BaseVocabularySchema
+
+  package: invenio_vocabularies
+  record-class: invenio_vocabularies.records.api.Vocabulary
+  record-resource-config-class: invenio_vocabularies.resources.VocabulariesResourceConfig
+  record-resource-class: invenio_vocabularies.resources.VocabulariesResource
+  record-permissions-class: invenio_vocabularies.services.permissions.PermissionPolicy
+  record-service-class: invenio_vocabularies.services.service.VocabulariesService
+  record-service-config-class: invenio_vocabularies.services.service.VocabulariesServiceConfig
+  record-search-options-class: invenio_vocabularies.services.service.VocabularySearchOptions
+
+  properties:
+    description: 
+      use: "#/$defs/i18nObjectString"
+      marshmallow: {read: false, write: false, field: "i18n_strings"}
+    icon: 
+      type: keyword
+      marshmallow: {read: false, write: false}
+    id: 
+      type: keyword
+      mapping: {"fields": {text: {type: search_as_you_type }}}
+      marshmallow: {read: false, write: false}
+    pid{}: 
+      pk: integer{required:true}
+      status: keyword{enum:[N,K,R,M,D],required:true}
+      pid_type: keyword
+      obj_type: keyword
+      ^marshmallow: {read: false, write: false}
+    props:
+      type: object
+      mapping: {dynamic: true}
+      additionalProperties:
+        type: keyword
+      marshmallow: {read: false, write: false, field: "ma_fields.Dict(allow_none=False, keys=fields.Str(), values=fields.Str())"}
+    tags[]: 
+      type: keyword
+      ^marshmallow: {read: false, write: false}
+    title: 
+      use: "#/$defs/i18nObjectString"
+      mapping: {dynamic: true, properties: { en: {type: search_as_you_type, copy_to: title_sort}}}
+      marshmallow: {read: false, write: false, field: "i18n_strings"}
+    title_sort:
+      # TODO: do not generate in json schema
+      type: keyword
+      marshmallow: {read: false, write: false}
+      jsonschema: {generate: false}
+    type{}:
+      id: keyword
+      pid_type: keyword
+      ^marshmallow: {read: false, write: false}
+
+  plugins:
+    builder:
+      disable:
+        - jsonschema
+        - mapping
+        - setup_cfg
+        - setup_py
+        - pyproject_toml
+        - python_structure
+        - invenio_record
+        - invenio_record_metadata
+        - invenio_record_schema
+        - invenio_record_permissions
+        - invenio_record_search
+        - invenio_record_service_config
+        - invenio_record_service
+        - invenio_record_dumper
+        - invenio_record_resource_config
+        - invenio_record_resource
+        - invenio_views
+        - invenio_config
+        - invenio_ext
+        - invenio_ext_setup_cfg
+        - invenio_proxies
+        - invenio_record_metadata_alembic_setup_cfg
+        - invenio_record_metadata_models_setup_cfg
+        - invenio_record_resource_setup_cfg
+        - invenio_record_search_setup_cfg
+        - invenio_record_jsonschemas_setup_cfg
+        - script_sample_data
+        - invenio_version
+        # - model_saver
+        - model_registration
+        - invenio_cli
+        - invenio_cli_setup_cfg
+
+
+$defs:
+  i18nObjectString:
+    type: object
+    propertyNames:
+      pattern: "^[a-z]{2}$"
+    additionalProperties:
+      type: str
+    mapping: {dynamic: true}
