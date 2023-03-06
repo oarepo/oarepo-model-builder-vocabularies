@@ -10,3 +10,5 @@ model:
         affiliation:
           type: taxonomy
           vocabulary-type: affiliations
+          marshmallow:
+            schema-class: article.services.records.schema.ArticleSchema
