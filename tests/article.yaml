@@ -10,3 +10,9 @@ model:
         affiliation:
           type: taxonomy
           vocabulary-type: affiliations
+          marshmallow:
+            schema-class: article.services.records.schema.AffiliationSchema
+  plugins:
+   builder:
+    disable:
+     - script_sample_data

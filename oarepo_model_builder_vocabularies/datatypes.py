@@ -6,6 +6,9 @@ from oarepo_model_builder.validation import InvalidModelException
 from oarepo_model_builder_relations.datatypes import RelationSchema
 from marshmallow import fields
 from oarepo_model_builder.utils.deepmerge import deepmerge
+from oarepo_model_builder.validation.property_marshmallow import (
+    ObjectPropertyMarshmallowSchema,
+)
 
 
 class VocabularyDataType(ObjectDataType):
@@ -77,7 +80,9 @@ class VocabularyDataType(ObjectDataType):
             }
         )
 
-    class ModelSchema(RelationSchema, ObjectDataType.ModelSchema):
+    class ModelSchema(
+        RelationSchema, ObjectPropertyMarshmallowSchema, ObjectDataType.ModelSchema
+    ):
         vocabulary_type = fields.String(
             attribute="vocabulary-type", data_key="vocabulary-type", required=False
         )
@@ -118,7 +123,7 @@ class TaxonomyDataType(VocabularyDataType):
                                 "items": {
                                     "type": "object",
                                     "propertyNames": {"pattern": "^[a-z]{2}$"},
-                                    "additionalProperties": {"type": "str"},
+                                    "additionalProperties": {"type": "string"},
                                     "mapping": {"dynamic": True},
                                     "marshmallow": {"field": "i18n_strings"},
                                 },
