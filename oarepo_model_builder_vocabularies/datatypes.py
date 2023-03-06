@@ -123,7 +123,7 @@ class TaxonomyDataType(VocabularyDataType):
                                 "items": {
                                     "type": "object",
                                     "propertyNames": {"pattern": "^[a-z]{2}$"},
-                                    "additionalProperties": {"type": "str"},
+                                    "additionalProperties": {"type": "string"},
                                     "mapping": {"dynamic": True},
                                     "marshmallow": {"field": "i18n_strings"},
                                 },

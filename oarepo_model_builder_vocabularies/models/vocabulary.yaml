@@ -101,5 +101,5 @@ $defs:
     propertyNames:
       pattern: "^[a-z]{2}$"
     additionalProperties:
-      type: str
+      type: string
     mapping: {dynamic: true}
