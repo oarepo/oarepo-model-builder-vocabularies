@@ -1,39 +1,25 @@
-import copy
-from oarepo_model_builder.datatypes import ObjectDataType
-from oarepo_model_builder.stack import ReplaceElement
 from oarepo_model_builder.validation import InvalidModelException
 
-from oarepo_model_builder_relations.datatypes import RelationSchema
 from marshmallow import fields
-from oarepo_model_builder.utils.deepmerge import deepmerge
-from oarepo_model_builder.validation.property_marshmallow import (
-    ObjectPropertyMarshmallowSchema,
-)
+from oarepo_model_builder_relations.datatypes import RelationDataType
+import munch
+from oarepo_model_builder.utils.hyphen_munch import HyphenMunch
 
 
-class VocabularyDataType(ObjectDataType):
+class VocabularyDataType(RelationDataType):
     model_type = "vocabulary"
 
-    def mapping(self, **extras):
-        ret = super().mapping(**extras)
-        return ret
+    def prepare(self, context):
+        vocabulary_type = self.definition.pop("vocabulary-type", None)
+        vocabulary_class = self.definition.pop("class", None)
 
-    def model_schema(self, **extras):
-        data = copy.deepcopy(self.definition)
-        data.pop("type", None)
-        fields = data.pop("keys", ["id", "title"])
-        vocabulary_type = data.pop("vocabulary-type", None)
-        vocabulary_imports = data.pop("imports", [])
-        model = data.pop("model", "vocabularies")
-        vocabulary_class = data.pop("class", None)
-        name = data.pop("name", None)
+        vocabulary_imports = self.definition.setdefault("imports", [])
+        self.definition.setdefault("model", "vocabularies")
+        self.definition.setdefault("keys", ["id", "title"])
+        self.definition.setdefault("marshmallow", {})
+        self.definition.setdefault("ui", {}).setdefault("marshmallow", {})
 
-        schema_prefix = data.pop("schema-prefix", None)
-        relation_classes = data.pop("relation-classes", None)
-        relation_class = data.pop("relation-class", None)
-        pid_field = data.pop("pid-field", None)
-        flatten = data.pop("flatten", None)
-        marshmallow = data.pop("marshmallow", {})
+        pid_field = self.definition.get("pid-field", None)
 
         if not pid_field:
             if not vocabulary_class:
@@ -45,11 +31,6 @@ class VocabularyDataType(ObjectDataType):
                 vocabulary_imports.append(
                     {"import": "invenio_vocabularies.records.api.Vocabulary"}
                 )
-                if "imports" not in marshmallow:
-                    marshmallow["imports"] = []
-                marshmallow["imports"].append(
-                    {"import": "invenio_vocabularies.services.schema.i18n_strings"}
-                )
             else:
                 if vocabulary_type:
                     raise InvalidModelException(
@@ -57,32 +38,11 @@ class VocabularyDataType(ObjectDataType):
                     )
                 pid_field = f"{vocabulary_class}.pid"
 
-        relation_settings = {
-            "type": "relation",
-            "model": model,
-            "keys": fields,
-            "imports": vocabulary_imports,
-            "pid-field": pid_field,
-            "name": name,
-            "schema-prefix": schema_prefix,
-            "relation-classes": relation_classes,
-            "relation-class": relation_class,
-            "flatten": flatten,
-            "marshmallow": marshmallow,
-        }
+        self.definition["type"] = "relation"
+        self.definition["pid-field"] = pid_field
+        super().prepare(context)
 
-        raise ReplaceElement(
-            {
-                self.key: deepmerge(
-                    data,
-                    {k: v for k, v in relation_settings.items() if v is not None},
-                )
-            }
-        )
-
-    class ModelSchema(
-        RelationSchema, ObjectPropertyMarshmallowSchema, ObjectDataType.ModelSchema
-    ):
+    class ModelSchema(RelationDataType.ModelSchema):
         vocabulary_type = fields.String(
             attribute="vocabulary-type", data_key="vocabulary-type", required=False
         )
@@ -92,7 +52,7 @@ class VocabularyDataType(ObjectDataType):
 class TaxonomyDataType(VocabularyDataType):
     model_type = "taxonomy"
 
-    def model_schema(self, **extras):
+    def prepare(self, context):
         keys = list(self.definition.get("keys", []))
 
         def has_key(fields, field_name):
@@ -126,6 +86,9 @@ class TaxonomyDataType(VocabularyDataType):
                                     "additionalProperties": {"type": "string"},
                                     "mapping": {"dynamic": True},
                                     "marshmallow": {"field": "i18n_strings"},
+                                    "ui": {
+                                        "marshmallow": {"field": "i18n_strings"},
+                                    },
                                 },
                             },
                             "ancestors": {
@@ -136,15 +99,9 @@ class TaxonomyDataType(VocabularyDataType):
                     },
                 }
             )
-        raise ReplaceElement(
-            {
-                self.key: {
-                    **self.definition,
-                    "type": "vocabulary",
-                    "keys": list(keys),
-                }
-            }
-        )
+        self.definition["type"] = type
+        self.definition["keys"] = munch.munchify(list(keys), HyphenMunch)
+        super().prepare(context)
 
 
 DATATYPES = [VocabularyDataType, TaxonomyDataType]
