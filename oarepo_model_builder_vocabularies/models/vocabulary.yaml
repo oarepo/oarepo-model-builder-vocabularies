@@ -1,6 +1,11 @@
 # model for invenio vocabularies, does not add any hierarchy or other features
 # just allows using the plain invenio vocabularies from custom metadata schemas
 # via lang: vocabulary{type:language, fields:[id,title]}
+
+#
+# TODO: not up to date with vocabulary.json
+#
+
 model:
   use: invenio
   index-name: vocabulary-v1.0.0.json
@@ -21,7 +26,7 @@ model:
   properties:
     description: 
       use: "#/$defs/i18nObjectString"
-      marshmallow: {read: false, write: false, field: "i18n_strings"}
+      marshmallow: {read: false, write: false, field: "i18n_strings", imports: [{"import-path": "invenio_vocabularies.services.schema.i18n_strings"}]}
     icon: 
       type: keyword
       marshmallow: {read: false, write: false}
@@ -47,7 +52,7 @@ model:
     title: 
       use: "#/$defs/i18nObjectString"
       mapping: {dynamic: true, properties: { en: {type: search_as_you_type, copy_to: title_sort}}}
-      marshmallow: {read: false, write: false, field: "i18n_strings"}
+      marshmallow: {read: false, write: false, field: "i18n_strings", imports: [{"import-path": "invenio_vocabularies.services.schema.i18n_strings"}]}
     title_sort:
       # TODO: do not generate in json schema
       type: keyword

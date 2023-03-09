@@ -25,7 +25,26 @@
           "field-class": "ma_fields.Nested",
           "validators": [],
           "schema-class": "invenio_vocabularies.services.records.schema.DescriptionSchema",
-          "imports": []
+          "imports": [
+            {
+              "import": "invenio_vocabularies.services.schema.i18n_strings"
+            }
+          ]
+        },
+        "ui": {
+          "marshmallow": {
+            "read": false,
+            "write": false,
+            "field": "i18n_strings",
+            "field-class": "ma_fields.Nested",
+            "validators": [],
+            "schema-class": "invenio_vocabularies.services.records.schema.DescriptionSchema",
+            "imports": [
+              {
+                "import": "invenio_vocabularies.services.schema.i18n_strings"
+              }
+            ]
+          }
         },
         "type": "object",
         "propertyNames": {
@@ -46,6 +65,15 @@
           "validators": [],
           "imports": []
         },
+        "ui": {
+          "marshmallow": {
+            "read": false,
+            "write": false,
+            "field-class": "ma_fields.String",
+            "validators": [],
+            "imports": []
+          }
+        },
         "type": "keyword"
       },
       "id": {
@@ -55,6 +83,15 @@
           "field-class": "ma_fields.String",
           "validators": [],
           "imports": []
+        },
+        "ui": {
+          "marshmallow": {
+            "read": false,
+            "write": false,
+            "field-class": "ma_fields.String",
+            "validators": [],
+            "imports": []
+          }
         },
         "type": "keyword",
         "mapping": {
@@ -78,6 +115,17 @@
           "schema-class": "invenio_vocabularies.services.records.schema.PropsSchema",
           "imports": []
         },
+        "ui": {
+          "marshmallow": {
+            "read": false,
+            "write": false,
+            "field": "ma_fields.Dict(allow_none=False, keys=fields.Str(), values=fields.Str())",
+            "field-class": "ma_fields.Nested",
+            "validators": [],
+            "schema-class": "invenio_vocabularies.services.records.schema.PropsSchema",
+            "imports": []
+          }
+        },
         "type": "object",
         "mapping": {
           "dynamic:true": null
@@ -94,7 +142,26 @@
           "field-class": "ma_fields.Nested",
           "validators": [],
           "schema-class": "invenio_vocabularies.services.records.schema.TitleSchema",
-          "imports": []
+          "imports": [
+            {
+              "import": "invenio_vocabularies.services.schema.i18n_strings"
+            }
+          ]
+        },
+        "ui": {
+          "marshmallow": {
+            "read": false,
+            "write": false,
+            "field": "i18n_strings",
+            "field-class": "ma_fields.Nested",
+            "validators": [],
+            "schema-class": "invenio_vocabularies.services.records.schema.TitleSchema",
+            "imports": [
+              {
+                "import": "invenio_vocabularies.services.schema.i18n_strings"
+              }
+            ]
+          }
         },
         "mapping": {
           "dynamic": true,
@@ -121,6 +188,15 @@
           "validators": [],
           "imports": []
         },
+        "ui": {
+          "marshmallow": {
+            "read": false,
+            "write": false,
+            "field-class": "ma_fields.String",
+            "validators": [],
+            "imports": []
+          }
+        },
         "type": "keyword",
         "jsonschema": {
           "generate": false
@@ -137,6 +213,19 @@
               "import": "datetime.datetime.strptime"
             }
           ]
+        },
+        "ui": {
+          "marshmallow": {
+            "write": false,
+            "read": true,
+            "field-class": "ma_fields.String",
+            "validators": ["lambda value: strptime(value, '%Y:%m:%d')"],
+            "imports": [
+              {
+                "import": "datetime.datetime.strptime"
+              }
+            ]
+          }
         },
         "type": "date",
         "sample": {
@@ -155,6 +244,19 @@
             }
           ]
         },
+        "ui": {
+          "marshmallow": {
+            "write": false,
+            "read": true,
+            "field-class": "ma_fields.String",
+            "validators": ["lambda value: strptime(value, '%Y:%m:%d')"],
+            "imports": [
+              {
+                "import": "datetime.datetime.strptime"
+              }
+            ]
+          }
+        },
         "type": "date",
         "sample": {
           "skip": true
@@ -167,6 +269,15 @@
           "field-class": "ma_fields.String",
           "validators": [],
           "imports": []
+        },
+        "ui": {
+          "marshmallow": {
+            "read": false,
+            "write": false,
+            "field-class": "ma_fields.String",
+            "validators": [],
+            "imports": []
+          }
         },
         "type": "keyword",
         "sample": {
@@ -182,6 +293,16 @@
           "schema-class": "invenio_vocabularies.services.records.schema.PidSchema",
           "imports": []
         },
+        "ui": {
+          "marshmallow": {
+            "read": false,
+            "write": false,
+            "field-class": "ma_fields.Nested",
+            "validators": [],
+            "schema-class": "invenio_vocabularies.services.records.schema.PidSchema",
+            "imports": []
+          }
+        },
         "type": "object",
         "properties": {
           "pk": {
@@ -189,6 +310,13 @@
               "field-class": "ma_fields.Integer",
               "validators": [],
               "imports": []
+            },
+            "ui": {
+              "marshmallow": {
+                "field-class": "ma_fields.Integer",
+                "validators": [],
+                "imports": []
+              }
             },
             "type": "integer",
             "required": true
@@ -198,6 +326,13 @@
               "field-class": "ma_fields.String",
               "validators": [],
               "imports": []
+            },
+            "ui": {
+              "marshmallow": {
+                "field-class": "ma_fields.String",
+                "validators": [],
+                "imports": []
+              }
             },
             "type": "keyword",
             "enum": ["N", "K", "R", "M", "D"],
@@ -209,6 +344,13 @@
               "validators": [],
               "imports": []
             },
+            "ui": {
+              "marshmallow": {
+                "field-class": "ma_fields.String",
+                "validators": [],
+                "imports": []
+              }
+            },
             "type": "keyword"
           },
           "obj_type": {
@@ -216,6 +358,13 @@
               "field-class": "ma_fields.String",
               "validators": [],
               "imports": []
+            },
+            "ui": {
+              "marshmallow": {
+                "field-class": "ma_fields.String",
+                "validators": [],
+                "imports": []
+              }
             },
             "type": "keyword"
           }
@@ -229,12 +378,28 @@
           "validators": [],
           "imports": []
         },
+        "ui": {
+          "marshmallow": {
+            "read": false,
+            "write": false,
+            "field-class": "ma_fields.List",
+            "validators": [],
+            "imports": []
+          }
+        },
         "type": "array",
         "items": {
           "marshmallow": {
             "field-class": "ma_fields.String",
             "validators": [],
             "imports": []
+          },
+          "ui": {
+            "marshmallow": {
+              "field-class": "ma_fields.String",
+              "validators": [],
+              "imports": []
+            }
           },
           "type": "keyword"
         }
@@ -248,6 +413,16 @@
           "schema-class": "invenio_vocabularies.services.records.schema.TypeSchema",
           "imports": []
         },
+        "ui": {
+          "marshmallow": {
+            "read": false,
+            "write": false,
+            "field-class": "ma_fields.Nested",
+            "validators": [],
+            "schema-class": "invenio_vocabularies.services.records.schema.TypeSchema",
+            "imports": []
+          }
+        },
         "type": "object",
         "properties": {
           "id": {
@@ -256,6 +431,13 @@
               "validators": [],
               "imports": []
             },
+            "ui": {
+              "marshmallow": {
+                "field-class": "ma_fields.String",
+                "validators": [],
+                "imports": []
+              }
+            },
             "type": "keyword"
           },
           "pid_type": {
@@ -263,6 +445,13 @@
               "field-class": "ma_fields.String",
               "validators": [],
               "imports": []
+            },
+            "ui": {
+              "marshmallow": {
+                "field-class": "ma_fields.String",
+                "validators": [],
+                "imports": []
+              }
             },
             "type": "keyword"
           }
