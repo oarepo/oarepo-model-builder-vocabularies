@@ -78,12 +78,22 @@ class TaxonomyDataType(VocabularyDataType):
                         "marshmallow": {
                             "schema-class": "oarepo_vocabularies.services.schemas.HierarchySchema",
                             "generate": False,
+                            "imports": [
+                                {
+                                    "import": "oarepo_vocabularies.services.schemas.HierarchySchema"
+                                }
+                            ],
                         },
                         "ui": {
                             "marshmallow": {
                                 "schema-class": "oarepo_vocabularies.services.ui_schemas.HierarchyUISchema",
                                 "generate": False,
                             },
+                            "imports": [
+                                {
+                                    "import": "oarepo_vocabularies.services.ui_schemas.HierarchyUISchema"
+                                }
+                            ],
                         },
                         "properties": {
                             "parent": {"type": "keyword"},
@@ -112,7 +122,6 @@ class TaxonomyDataType(VocabularyDataType):
         self.definition["type"] = type
         self.definition["keys"] = munch.munchify(list(keys), HyphenMunch)
         super().prepare(context)
-        self.ModelSchema().validate(self.definition)
 
 
 DATATYPES = [VocabularyDataType, TaxonomyDataType]
