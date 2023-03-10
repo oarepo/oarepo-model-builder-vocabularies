@@ -73,18 +73,18 @@ class TaxonomyDataType(VocabularyDataType):
             keys.append(
                 {
                     "key": "hierarchy",
-                    "marshmallow": {
-                        "class-name": "oarepo_vocabularies.services.schemas.HierarchySchema",
-                        "generate": False,
-                    },
-                    "ui": {
-                        "marshmallow": {
-                            "class-name": "oarepo_vocabularies.services.ui_schemas.HierarchyUISchema",
-                            "generate": False,
-                        },
-                    },
                     "model": {
                         "type": "object",
+                        "marshmallow": {
+                            "schema-class": "oarepo_vocabularies.services.schemas.HierarchySchema",
+                            "generate": False,
+                        },
+                        "ui": {
+                            "marshmallow": {
+                                "schema-class": "oarepo_vocabularies.services.ui_schemas.HierarchyUISchema",
+                                "generate": False,
+                            },
+                        },
                         "properties": {
                             "parent": {"type": "keyword"},
                             "level": {"type": "integer"},
@@ -112,6 +112,7 @@ class TaxonomyDataType(VocabularyDataType):
         self.definition["type"] = type
         self.definition["keys"] = munch.munchify(list(keys), HyphenMunch)
         super().prepare(context)
+        self.ModelSchema().validate(self.definition)
 
 
 DATATYPES = [VocabularyDataType, TaxonomyDataType]
