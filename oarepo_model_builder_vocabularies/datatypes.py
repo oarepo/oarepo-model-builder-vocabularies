@@ -73,6 +73,16 @@ class TaxonomyDataType(VocabularyDataType):
             keys.append(
                 {
                     "key": "hierarchy",
+                    "marshmallow": {
+                        "class-name": "oarepo_vocabularies.services.schemas.HierarchySchema",
+                        "generate": False,
+                    },
+                    "ui": {
+                        "marshmallow": {
+                            "class-name": "oarepo_vocabularies.services.ui_schemas.HierarchyUISchema",
+                            "generate": False,
+                        },
+                    },
                     "model": {
                         "type": "object",
                         "properties": {
