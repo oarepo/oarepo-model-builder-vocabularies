@@ -2,22 +2,20 @@
 
 set -e
 
-if ! [ -d .venv ] ; then
-    python3 -m venv .venv
-    .venv/bin/pip install -U setuptools pip wheel
-    .venv/bin/pip install -e .
-fi
+rm -rf .venv
+
+python3 -m venv .venv
+.venv/bin/pip install -U setuptools pip wheel
+.venv/bin/pip install -e .
 
 BUILDER=.venv/bin/oarepo-compile-model
 
-if ! [ -f tests/article/setup.cfg ] ; then
-    test -d tests/article && rm -rf tests/article
-    ${BUILDER} tests/article.yaml --output-directory tests/article -vvv
-fi
+rm -rf tests/article
 
-if ! [ -d .venv-tests ] ; then
-    python3 -m venv .venv-tests
-fi
+${BUILDER} tests/article.yaml --output-directory tests/article -vvv
+
+rm -rf .venv-tests
+python3 -m venv .venv-tests
 
 source .venv-tests/bin/activate
 
@@ -26,6 +24,6 @@ pip install pyyaml opensearch-dsl
 pip install -e tests/article
 pip install pytest-invenio
 pip install 'oarepo-runtime>=1.1.5'
-pip install 'oarepo-vocabularies>=1.0.0'
+pip install 'oarepo-vocabularies>=1.0.4'
 
 pytest tests

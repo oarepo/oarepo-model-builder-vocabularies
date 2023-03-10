@@ -75,6 +75,26 @@ class TaxonomyDataType(VocabularyDataType):
                     "key": "hierarchy",
                     "model": {
                         "type": "object",
+                        "marshmallow": {
+                            "schema-class": "oarepo_vocabularies.services.schemas.HierarchySchema",
+                            "generate": False,
+                            "imports": [
+                                {
+                                    "import": "oarepo_vocabularies.services.schemas.HierarchySchema"
+                                }
+                            ],
+                        },
+                        "ui": {
+                            "marshmallow": {
+                                "schema-class": "oarepo_vocabularies.services.ui_schemas.HierarchyUISchema",
+                                "generate": False,
+                            },
+                            "imports": [
+                                {
+                                    "import": "oarepo_vocabularies.services.ui_schemas.HierarchyUISchema"
+                                }
+                            ],
+                        },
                         "properties": {
                             "parent": {"type": "keyword"},
                             "level": {"type": "integer"},
