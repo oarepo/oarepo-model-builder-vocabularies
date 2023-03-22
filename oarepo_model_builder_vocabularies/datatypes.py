@@ -18,7 +18,8 @@ class VocabularyDataType(RelationDataType):
         self.definition.setdefault("keys", ["id", "title"])
         self.definition.setdefault("marshmallow", {})
         self.definition.setdefault("ui", {}).setdefault("marshmallow", {})
-
+        self.definition["ui"].setdefault("detail", "vocabulary_item")
+        self.definition["ui"].setdefault("edit", "vocabulary_item")
         pid_field = self.definition.get("pid-field", None)
 
         if not pid_field:
@@ -54,6 +55,8 @@ class TaxonomyDataType(VocabularyDataType):
 
     def prepare(self, context):
         keys = list(self.definition.get("keys", []))
+        self.definition.setdefault("ui", {}).setdefault("detail", "taxonomy_item")
+        self.definition["ui"].setdefault("edit", "taxonomy_item")
 
         def has_key(fields, field_name):
             for fld in fields:
