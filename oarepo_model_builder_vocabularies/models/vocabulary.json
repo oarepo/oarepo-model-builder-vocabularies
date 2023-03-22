@@ -33,15 +33,11 @@
         },
         "ui": {
           "marshmallow": {
-            "read": false,
-            "write": false,
-            "field": "i18n_strings",
-            "field-class": "ma_fields.Nested",
-            "validators": [],
-            "schema-class": "invenio_vocabularies.services.records.schema.DescriptionSchema",
+            "field": "I18nStrUIField()",
+            "generate": false,
             "imports": [
               {
-                "import": "invenio_vocabularies.services.schema.i18n_strings"
+                "import": "oarepo_vocabularies.services.ui_schemas.I18nStrUIField"
               }
             ]
           }
@@ -150,15 +146,11 @@
         },
         "ui": {
           "marshmallow": {
-            "read": false,
-            "write": false,
-            "field": "i18n_strings",
-            "field-class": "ma_fields.Nested",
-            "validators": [],
-            "schema-class": "invenio_vocabularies.services.records.schema.TitleSchema",
+            "field": "I18nStrUIField()",
+            "generate": false,
             "imports": [
               {
-                "import": "invenio_vocabularies.services.schema.i18n_strings"
+                "import": "oarepo_vocabularies.services.ui_schemas.I18nStrUIField"
               }
             ]
           }
