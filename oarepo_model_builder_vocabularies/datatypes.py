@@ -15,7 +15,9 @@ class VocabularyDataType(RelationDataType):
 
         vocabulary_imports = self.definition.setdefault("imports", [])
         self.definition.setdefault("model", "vocabularies")
-        self.definition.setdefault("keys", ["id", "title"])
+        self.definition.setdefault(
+            "keys", ["id", "title", {"key": "type.id", "target": "type"}]
+        )
         self.definition.setdefault("marshmallow", {})
         self.definition.setdefault("ui", {}).setdefault("marshmallow", {})
         self.definition["ui"].setdefault("detail", "vocabulary_item")
@@ -72,6 +74,8 @@ class TaxonomyDataType(VocabularyDataType):
             keys.append("id")
         if not has_key(keys, "title"):
             keys.append("title")
+        if not has_key(keys, "type.id"):
+            keys.append({"key": "type.id", "target": "type"})
         if not has_key(keys, "hierarchy"):
             keys.append(
                 {

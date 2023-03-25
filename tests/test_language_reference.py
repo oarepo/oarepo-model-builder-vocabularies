@@ -55,4 +55,5 @@ def test_affiliation_hierarchy(
         "id": "uk-mff",
         "title": {"en": "Faculty of Mathematics and Physics"},
         "@v": article.data["metadata"]["affiliation"]["@v"],
+        "type": "affiliations",
     }
