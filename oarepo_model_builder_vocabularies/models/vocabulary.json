@@ -33,11 +33,11 @@
         },
         "ui": {
           "marshmallow": {
-            "field": "I18nStrUIField()",
+            "field": "VocabularyI18nStrUIField()",
             "generate": false,
             "imports": [
               {
-                "import": "oarepo_vocabularies.services.ui_schemas.I18nStrUIField"
+                "import": "oarepo_vocabularies.services.ui_schemas.VocabularyI18nStrUIField"
               }
             ]
           }
@@ -146,11 +146,11 @@
         },
         "ui": {
           "marshmallow": {
-            "field": "I18nStrUIField()",
+            "field": "VocabularyI18nStrUIField()",
             "generate": false,
             "imports": [
               {
-                "import": "oarepo_vocabularies.services.ui_schemas.I18nStrUIField"
+                "import": "oarepo_vocabularies.services.ui_schemas.VocabularyI18nStrUIField"
               }
             ]
           }
