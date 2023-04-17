@@ -15,12 +15,13 @@ rm -rf tests/article
 ${BUILDER} tests/article.yaml --output-directory tests/article -vvv
 
 rm -rf .venv-tests
-python3 -m venv .venv-tests
+python3.9 -m venv .venv-tests
 
 source .venv-tests/bin/activate
 
 pip install -U setuptools pip wheel
 pip install pyyaml opensearch-dsl 
+pip install oarepo
 pip install -e tests/article
 pip install pytest-invenio
 pip install 'oarepo-runtime>=1.1.5'

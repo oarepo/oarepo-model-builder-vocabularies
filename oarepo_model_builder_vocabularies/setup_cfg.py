@@ -1,8 +1,5 @@
-from pkg_resources import parse_version
-
 from oarepo_model_builder.builders import OutputBuilder
 from oarepo_model_builder.outputs.cfg import CFGOutput
-from oarepo_model_builder.utils.verbose import log
 
 
 class VocabulariesSetupCfgBuilder(OutputBuilder):

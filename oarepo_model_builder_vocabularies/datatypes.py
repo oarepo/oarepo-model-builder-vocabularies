@@ -1,16 +1,20 @@
-from oarepo_model_builder.validation import InvalidModelException
-
-from marshmallow import fields
-from oarepo_model_builder_relations.datatypes import RelationDataType
 import munch
+from marshmallow import fields
+from oarepo_model_builder.datatypes.datatypes import DataType
 from oarepo_model_builder.utils.hyphen_munch import HyphenMunch
+from oarepo_model_builder.validation import InvalidModelException
+from oarepo_model_builder_relations.datatypes import RelationDataType
 
 
 class VocabularyDataType(RelationDataType):
     model_type = "vocabulary"
+    default_facet_class = "VocabularyFacet"
+    default_facet_imports = [
+        {"import": "oarepo_vocabularies.services.facets.VocabularyFacet"}
+    ]
 
     def prepare(self, context):
-        vocabulary_type = self.definition.pop("vocabulary-type", None)
+        vocabulary_type = self.definition.get("vocabulary-type", None)
         vocabulary_class = self.definition.pop("class", None)
 
         vocabulary_imports = self.definition.setdefault("imports", [])
@@ -41,9 +45,38 @@ class VocabularyDataType(RelationDataType):
                     )
                 pid_field = f"{vocabulary_class}.pid"
 
-        self.definition["type"] = "relation"
+        # self.definition["type"] = "relation"
         self.definition["pid-field"] = pid_field
         super().prepare(context)
+
+    def get_facet(self, stack, parent_path):
+        if not stack:
+            # we are the facet, unlike normal container, for which a facet is not generated,
+            # we need to generate it -> calling direct data type
+            return DataType.get_facet(self, stack, parent_path)
+
+        # do not return any facets for children
+        return []
+
+    def _get_facet_definition(
+        self, stack, facet_class, facet_name, path, path_suffix, label, serialized_args
+    ):
+        # the container's implementation counts on generating facets for children and not self,
+        # so bypassing it and calling direct data type
+        vocabulary_type = self.definition.get("vocabulary-type", None)
+        if vocabulary_type:
+            serialized_args += ", "
+            serialized_args += f'vocabulary="{vocabulary_type}"'
+        return DataType._get_facet_definition(
+            self,
+            stack,
+            facet_class,
+            facet_name,
+            path,
+            path_suffix,
+            label,
+            serialized_args,
+        )
 
     class ModelSchema(RelationDataType.ModelSchema):
         vocabulary_type = fields.String(
@@ -54,6 +87,10 @@ class VocabularyDataType(RelationDataType):
 
 class TaxonomyDataType(VocabularyDataType):
     model_type = "taxonomy"
+    default_facet_class = "HierarchyVocabularyFacet"
+    default_facet_imports = [
+        {"import": "oarepo_vocabularies.services.facets.HierarchyVocabularyFacet"}
+    ]
 
     def prepare(self, context):
         keys = list(self.definition.get("keys", []))
@@ -122,11 +159,14 @@ class TaxonomyDataType(VocabularyDataType):
                                 "type": "array",
                                 "items": {"type": "keyword"},
                             },
+                            "ancestors_or_self": {
+                                "type": "array",
+                                "items": {"type": "keyword"},
+                            },
                         },
                     },
                 }
             )
-        self.definition["type"] = type
         self.definition["keys"] = munch.munchify(list(keys), HyphenMunch)
         super().prepare(context)
 
