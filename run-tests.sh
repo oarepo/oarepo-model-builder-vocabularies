@@ -22,7 +22,7 @@ source .venv-tests/bin/activate
 pip install -U setuptools pip wheel
 pip install pyyaml opensearch-dsl 
 pip install oarepo
-# pip install -e tests/article
+pip install tests/article
 pip install pytest-invenio
 pip install 'oarepo-runtime>=1.1.5'
 pip install 'oarepo-vocabularies>=1.0.4'
