@@ -72,4 +72,4 @@ target/
 .DS_Store
 oarepo-vocabularies-monorepo.code-workspace
 
-tests/article
+built_tests
