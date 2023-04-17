@@ -1,7 +1,8 @@
+import os
+
 import pytest
 from invenio_app.factory import create_api
 from invenio_vocabularies.records.models import VocabularyType
-import os
 
 
 @pytest.fixture(scope="module")
@@ -28,11 +29,14 @@ def app_config(app_config):
         }
     ]
 
-    from oarepo_vocabularies.services.config import VocabulariesConfig
     from oarepo_vocabularies.resources.config import VocabulariesResourceConfig
+    from oarepo_vocabularies.services.config import VocabulariesConfig
 
     app_config["VOCABULARIES_SERVICE_CONFIG"] = VocabulariesConfig
     app_config["VOCABULARIES_RESOURCE_CONFIG"] = VocabulariesResourceConfig
+
+    app_config["I18N_LANGUAGES"] = [("en", "English"), ("cs", "Czech")]
+    app_config["BABEL_DEFAULT_LOCALE"] = "en"
 
     return app_config
 
@@ -44,7 +48,7 @@ def vocabulary_service(app):
 
 
 @pytest.fixture()
-def lang_type(db):
+def lang_type(app, db):
     """Get a language vocabulary type."""
     v = VocabularyType.create(id="languages", pid_type="lng")
     db.session.commit()
