@@ -15,7 +15,7 @@ rm -rf tests/article
 ${BUILDER} tests/article.yaml --output-directory tests/article -vvv
 
 rm -rf .venv-tests
-python3.9 -m venv .venv-tests
+python3 -m venv .venv-tests
 
 source .venv-tests/bin/activate
 
