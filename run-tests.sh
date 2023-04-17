@@ -28,4 +28,4 @@ pip install 'oarepo-runtime>=1.1.5'
 pip install 'oarepo-vocabularies>=1.0.4'
 pip install tqdm
 
-PYTHONPATH=tests/article pytest tests
+pytest tests
