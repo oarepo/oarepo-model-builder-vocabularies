@@ -1,3 +1,5 @@
+from pkg_resources import parse_version
+
 from oarepo_model_builder.builders import OutputBuilder
 from oarepo_model_builder.outputs.cfg import CFGOutput
 
@@ -9,4 +11,4 @@ class VocabulariesSetupCfgBuilder(OutputBuilder):
         super().finish()
 
         output: CFGOutput = self.builder.get_output("cfg", "setup.cfg")
-        output.add_dependency("invenio_vocabularies", ">=1.0.4")
+        output.add_dependency("oarepo-vocabularies", ">=2.0.0")

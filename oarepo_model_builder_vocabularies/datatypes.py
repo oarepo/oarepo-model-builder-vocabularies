@@ -1,9 +1,8 @@
-import munch
 from marshmallow import fields
 from oarepo_model_builder.datatypes.datatypes import DataType
-from oarepo_model_builder.utils.hyphen_munch import HyphenMunch
 from oarepo_model_builder.validation import InvalidModelException
 from oarepo_model_builder_relations.datatypes import RelationDataType
+import marshmallow as ma
 
 
 class VocabularyDataType(RelationDataType):
@@ -13,6 +12,9 @@ class VocabularyDataType(RelationDataType):
         {"import": "oarepo_vocabularies.services.facets.VocabularyFacet"}
     ]
 
+    class ModelSchema(RelationDataType.ModelSchema):
+        vocabulary_type = ma.fields.String(attribute="vocabulary-type", data_key="vocabulary-type")
+
     def prepare(self, context):
         vocabulary_type = self.definition.get("vocabulary-type", None)
         vocabulary_class = self.definition.pop("class", None)
@@ -20,7 +22,7 @@ class VocabularyDataType(RelationDataType):
         vocabulary_imports = self.definition.setdefault("imports", [])
         self.definition.setdefault("model", "vocabularies")
         self.definition.setdefault(
-            "keys", ["id", "title", {"key": "type.id", "target": "type"}]
+            "keys", ["id", "title"]
         )
         self.definition.setdefault("marshmallow", {})
         self.definition.setdefault("ui", {}).setdefault("marshmallow", {})
@@ -111,8 +113,6 @@ class TaxonomyDataType(VocabularyDataType):
             keys.append("id")
         if not has_key(keys, "title"):
             keys.append("title")
-        if not has_key(keys, "type.id"):
-            keys.append({"key": "type.id", "target": "type"})
         if not has_key(keys, "hierarchy"):
             keys.append(
                 {
@@ -120,24 +120,24 @@ class TaxonomyDataType(VocabularyDataType):
                     "model": {
                         "type": "object",
                         "marshmallow": {
-                            "schema-class": "oarepo_vocabularies.services.schemas.HierarchySchema",
+                            "class": "oarepo_vocabularies.services.schema.HierarchySchema",
                             "generate": False,
                             "imports": [
                                 {
-                                    "import": "oarepo_vocabularies.services.schemas.HierarchySchema"
+                                    "import": "oarepo_vocabularies.services.schema.HierarchySchema"
                                 }
                             ],
                         },
                         "ui": {
                             "marshmallow": {
-                                "schema-class": "oarepo_vocabularies.services.ui_schemas.HierarchyUISchema",
+                                "class": "oarepo_vocabularies.services.ui_schema.HierarchyUISchema",
                                 "generate": False,
+                                "imports": [
+                                    {
+                                        "import": "oarepo_vocabularies.services.ui_schema.HierarchyUISchema"
+                                    }
+                                ],
                             },
-                            "imports": [
-                                {
-                                    "import": "oarepo_vocabularies.services.ui_schemas.HierarchyUISchema"
-                                }
-                            ],
                         },
                         "properties": {
                             "parent": {"type": "keyword"},
@@ -167,7 +167,7 @@ class TaxonomyDataType(VocabularyDataType):
                     },
                 }
             )
-        self.definition["keys"] = munch.munchify(list(keys), HyphenMunch)
+        self.definition["keys"] = list(keys)
         super().prepare(context)
 
 
