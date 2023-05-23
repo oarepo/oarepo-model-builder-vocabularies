@@ -1,7 +1,7 @@
+import pytest
 from article.records.api import ArticleRecord
 from invenio_access.permissions import system_identity
 from invenio_vocabularies.records.api import Vocabulary
-import pytest
 
 
 def test_language_reference(
@@ -58,6 +58,7 @@ def test_affiliation_hierarchy(
         "title": {"en": "Faculty of Mathematics and Physics"},
         "@v": article.data["metadata"]["affiliation"]["@v"],
     }
+
 
 @pytest.mark.xfail
 def test_facets(

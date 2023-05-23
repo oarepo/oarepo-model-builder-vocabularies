@@ -1,8 +1,8 @@
+import marshmallow as ma
 from marshmallow import fields
 from oarepo_model_builder.datatypes.datatypes import DataType
 from oarepo_model_builder.validation import InvalidModelException
 from oarepo_model_builder_relations.datatypes import RelationDataType
-import marshmallow as ma
 
 
 class VocabularyDataType(RelationDataType):
@@ -13,7 +13,9 @@ class VocabularyDataType(RelationDataType):
     ]
 
     class ModelSchema(RelationDataType.ModelSchema):
-        vocabulary_type = ma.fields.String(attribute="vocabulary-type", data_key="vocabulary-type")
+        vocabulary_type = ma.fields.String(
+            attribute="vocabulary-type", data_key="vocabulary-type"
+        )
 
     def prepare(self, context):
         vocabulary_type = self.definition.get("vocabulary-type", None)
@@ -21,9 +23,7 @@ class VocabularyDataType(RelationDataType):
 
         vocabulary_imports = self.definition.setdefault("imports", [])
         self.definition.setdefault("model", "vocabularies")
-        self.definition.setdefault(
-            "keys", ["id", "title"]
-        )
+        self.definition.setdefault("keys", ["id", "title"])
         self.definition.setdefault("marshmallow", {})
         self.definition.setdefault("ui", {}).setdefault("marshmallow", {})
         self.definition["ui"].setdefault("detail", "vocabulary_item")
