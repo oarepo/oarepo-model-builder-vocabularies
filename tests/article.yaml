@@ -1,5 +1,6 @@
-model:
-  schema-server: 'local://'
+record:
+  module:
+    qualified: article
   properties:
     metadata:
       properties:
@@ -11,8 +12,11 @@ model:
           type: taxonomy
           vocabulary-type: affiliations
           marshmallow:
-            schema-class: article.services.records.schema.AffiliationSchema
+            class: article.services.records.schema.AffiliationSchema
   plugins:
    builder:
     disable:
      - script_sample_data
+settings:
+  schema-server: 'local://'
+  i18n-languages: [ en ]
