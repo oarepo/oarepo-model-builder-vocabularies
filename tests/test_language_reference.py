@@ -1,3 +1,6 @@
+import json
+import time
+
 import pytest
 from article.records.api import ArticleRecord
 from invenio_access.permissions import system_identity
@@ -5,7 +8,7 @@ from invenio_vocabularies.records.api import Vocabulary
 
 
 def test_language_reference(
-    app, db, lang_type, lang_data, vocabulary_service, article_service, vocab_cf
+    app, db, lang_type, lang_data, vocabulary_service, article_service, vocab_cf, search_clear
 ):
     vocabulary_service.create(system_identity, lang_data)
     Vocabulary.index.refresh()
@@ -21,11 +24,15 @@ def test_language_reference(
 
 
 def test_affiliation_hierarchy(
-    app, db, affiliation_type, vocabulary_service, article_service, vocab_cf
+    app, db, affiliation_type, lang_type, vocabulary_service, article_service, vocab_cf, client, search_clear
 ):
     vocabulary_service.create(
         system_identity,
         {"id": "uk", "type": "affiliations", "title": {"en": "Charles University"}},
+    )
+    vocabulary_service.create(
+        system_identity,
+        {"id": "en", "type": "languages", "title": {"en": "English"}},
     )
     vocabulary_service.create(
         system_identity,
@@ -40,7 +47,7 @@ def test_affiliation_hierarchy(
 
     article = article_service.create(
         system_identity,
-        {"metadata": {"title": "blah", "affiliation": {"id": "uk-mff"}}},
+        {"metadata": {"title": "blah", "language": {"id": "en"}, "affiliation": {"id": "uk-mff"}}},
     )
 
     assert article.data["metadata"]["affiliation"] == {
@@ -59,8 +66,46 @@ def test_affiliation_hierarchy(
         "@v": article.data["metadata"]["affiliation"]["@v"],
     }
 
+    ArticleRecord.index.refresh()
 
-@pytest.mark.xfail
+    # t1 = time.time()
+    # for i in range(100):
+    #     article_from_service = article_service.read(system_identity, article.id)
+    # t2 = time.time()
+    # print(f"Single read via service takes {(t2-t1)/100 * 1000} msecs")
+    #
+    # t1 = time.time()
+    # for i in range(100):
+    #     article_from_client = client.get(f'/article/{article.id}')
+    #     article_from_service_data = article_from_client.json
+    #     assert article_from_client.status_code == 200
+    # t2 = time.time()
+    # print(f"Single read via client takes {(t2-t1)/100 * 1000} msecs")
+    #
+    # t1 = time.time()
+    # for i in range(100):
+    #     article_from_client = client.get(f'/article/{article.id}', headers={'Accept': "application/vnd.inveniordm.v1+json"})
+    #     article_from_service_data = article_from_client.json
+    #     assert article_from_client.status_code == 200
+    # t2 = time.time()
+    # print(f"Single UI read via client takes {(t2-t1)/100 * 1000} msecs")
+
+    # t1 = time.time()
+    # for i in range(100):
+    #     article_from_client = client.get(f'/article/')
+    #     article_from_client_data = article_from_client.json
+    #     assert article_from_client.status_code == 200
+    # t2 = time.time()
+    # print(f"Single listing takes {(t2-t1)/100 * 1000} msecs")
+
+    t1 = time.time()
+    for i in range(100):
+        article_from_client = client.get(f'/article/', headers={'Accept': "application/vnd.inveniordm.v1+json"})
+        article_from_service_data = json.loads(article_from_client.data.decode('utf-8'))
+        assert article_from_client.status_code == 200
+    t2 = time.time()
+    print(f"Single UI listing takes {(t2-t1)/100 * 1000} msecs")
+
 def test_facets(
     app,
     db,
@@ -70,6 +115,7 @@ def test_facets(
     vocabulary_service,
     article_service,
     vocab_cf,
+    search_clear
 ):
     with app.test_request_context(headers=[("Accept-Language", "en")]):
         vocabulary_service.create(system_identity, lang_data)
@@ -101,13 +147,12 @@ def test_facets(
 
         ArticleRecord.index.refresh()
         articles = article_service.search(system_identity)
-        print(articles.aggregations)
-        assert articles.aggregations == {
+        assert json.loads(json.dumps(articles.aggregations, default=str)) == {
             "metadata_title": {
                 "buckets": [
                     {
                         "key": "blah",
-                        "doc_count": 3,
+                        "doc_count": 1,
                         "label": "blah",
                         "is_selected": False,
                     }
@@ -118,7 +163,7 @@ def test_facets(
                 "buckets": [
                     {
                         "key": "eng",
-                        "doc_count": 2,
+                        "doc_count": 1,
                         "label": "English",
                         "is_selected": False,
                     }
@@ -129,13 +174,13 @@ def test_facets(
                 "buckets": [
                     {
                         "key": "uk",
-                        "doc_count": 2,
+                        "doc_count": 1,
                         "label": "Charles University",
                         "is_selected": False,
                     },
                     {
                         "key": "uk-mff",
-                        "doc_count": 2,
+                        "doc_count": 1,
                         "label": "Faculty of Mathematics and Physics",
                         "is_selected": False,
                     },
