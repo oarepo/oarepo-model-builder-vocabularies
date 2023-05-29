@@ -7,10 +7,12 @@ from oarepo_model_builder_relations.datatypes import RelationDataType
 
 class VocabularyDataType(RelationDataType):
     model_type = "vocabulary"
-    default_facet_class = "VocabularyFacet"
-    default_facet_imports = [
-        {"import": "oarepo_vocabularies.services.facets.VocabularyFacet"}
-    ]
+    facets = {
+        'facet-class': "VocabularyFacet",
+        'imports': [
+            {"import": "oarepo_vocabularies.services.facets.VocabularyFacet"}
+        ],
+    }
 
     class ModelSchema(RelationDataType.ModelSchema):
         vocabulary_type = ma.fields.String(
@@ -49,6 +51,11 @@ class VocabularyDataType(RelationDataType):
 
         # self.definition["type"] = "relation"
         self.definition["pid-field"] = pid_field
+
+        # set up vocabulary argument to facets
+        facets = self.definition.setdefault('facets', {})
+        facets.setdefault('args', []).append(f'vocabulary={repr(vocabulary_type)}')
+
         super().prepare(context)
 
     def get_facet(self, stack, parent_path):
@@ -89,10 +96,12 @@ class VocabularyDataType(RelationDataType):
 
 class TaxonomyDataType(VocabularyDataType):
     model_type = "taxonomy"
-    default_facet_class = "HierarchyVocabularyFacet"
-    default_facet_imports = [
-        {"import": "oarepo_vocabularies.services.facets.HierarchyVocabularyFacet"}
-    ]
+    facets = {
+        'facet-class': "HierarchyVocabularyFacet",
+        'imports': [
+            {"import": "oarepo_vocabularies.services.facets.HierarchyVocabularyFacet"}
+        ],
+    }
 
     def prepare(self, context):
         keys = list(self.definition.get("keys", []))

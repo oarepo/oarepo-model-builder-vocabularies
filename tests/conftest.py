@@ -38,6 +38,10 @@ def app_config(app_config):
     app_config["I18N_LANGUAGES"] = [("en", "English"), ("cs", "Czech")]
     app_config["BABEL_DEFAULT_LOCALE"] = "en"
 
+    # disable redis cache
+    app_config["CACHE_TYPE"] = "SimpleCache"  # Flask-Caching related configs
+    app_config["CACHE_DEFAULT_TIMEOUT"] = 300
+
     return app_config
 
 
