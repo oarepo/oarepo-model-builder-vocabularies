@@ -13,10 +13,10 @@ record:
           vocabulary-type: affiliations
           marshmallow:
             class: article.services.records.schema.AffiliationSchema
-  plugins:
-   builder:
-    disable:
-     - script_sample_data
+plugins:
+ builder:
+  disable:
+   - script_sample_data
 settings:
   schema-server: 'local://'
   i18n-languages: [ en ]
