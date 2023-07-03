@@ -86,7 +86,7 @@ def lang_data():
 @pytest.fixture(scope="module")
 def article_service(app):
     """Vocabularies service object."""
-    return app.extensions["article"].service
+    return app.extensions["article"].service_records
 
 
 @pytest.fixture()

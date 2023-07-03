@@ -45,7 +45,7 @@ model:
       mapping: {dynamic: true}
       additionalProperties:
         type: keyword
-      marshmallow: {read: false, write: false, field: "ma_fields.Dict(allow_none=False, keys=fields.Str(), values=fields.Str())"}
+      marshmallow: {read: false, write: false, field: "ma.fields.Dict(allow_none=False, keys=fields.Str(), values=fields.Str())"}
     tags[]: 
       type: keyword
       ^marshmallow: {read: false, write: false}
