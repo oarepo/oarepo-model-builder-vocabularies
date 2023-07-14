@@ -3,6 +3,7 @@ from marshmallow import fields
 from oarepo_model_builder.datatypes.datatypes import DataType
 from oarepo_model_builder.validation import InvalidModelException
 from oarepo_model_builder_relations.datatypes import RelationDataType
+from oarepo_model_builder.datatypes.components.model.utils import array_contains_value
 
 
 class VocabularyDataType(RelationDataType):
@@ -54,7 +55,10 @@ class VocabularyDataType(RelationDataType):
 
         # set up vocabulary argument to facets
         facets = self.definition.setdefault('facets', {})
-        facets.setdefault('args', []).append(f'vocabulary={repr(vocabulary_type)}')
+        facets_args = facets.setdefault('args', [])
+        vocabulary_attr = f'vocabulary={repr(vocabulary_type)}'
+        if not array_contains_value(facets_args, vocabulary_attr):
+            facets_args.append(vocabulary_attr)
 
         super().prepare(context)
 
