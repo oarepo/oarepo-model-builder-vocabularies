@@ -15,4 +15,5 @@ class VocabularyDataTypeComponent(ObjectFacetsComponent):
         # do not build facet definition for children of this component
         return []
 
+
 COMPONENTS = [VocabularyDataTypeComponent]

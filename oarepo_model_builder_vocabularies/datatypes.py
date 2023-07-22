@@ -1,18 +1,16 @@
 import marshmallow as ma
 from marshmallow import fields
+from oarepo_model_builder.datatypes.components.model.utils import array_contains_value
 from oarepo_model_builder.datatypes.datatypes import DataType
 from oarepo_model_builder.validation import InvalidModelException
 from oarepo_model_builder_relations.datatypes import RelationDataType
-from oarepo_model_builder.datatypes.components.model.utils import array_contains_value
 
 
 class VocabularyDataType(RelationDataType):
     model_type = "vocabulary"
     facets = {
-        'facet-class': "VocabularyFacet",
-        'imports': [
-            {"import": "oarepo_vocabularies.services.facets.VocabularyFacet"}
-        ],
+        "facet-class": "VocabularyFacet",
+        "imports": [{"import": "oarepo_vocabularies.services.facets.VocabularyFacet"}],
     }
 
     class ModelSchema(RelationDataType.ModelSchema):
@@ -26,7 +24,7 @@ class VocabularyDataType(RelationDataType):
 
         vocabulary_imports = self.definition.setdefault("imports", [])
         self.definition.setdefault("model", "vocabularies")
-        self.definition.setdefault("keys", ["id", "title"])
+        keys = list(self.definition.setdefault("keys", ["id", "title"]))
         self.definition.setdefault("marshmallow", {})
         self.definition.setdefault("ui", {}).setdefault("marshmallow", {})
         self.definition["ui"].setdefault("detail", "vocabulary_item")
@@ -54,12 +52,21 @@ class VocabularyDataType(RelationDataType):
         self.definition["pid-field"] = pid_field
 
         # set up vocabulary argument to facets
-        facets = self.definition.setdefault('facets', {})
-        facets_args = facets.setdefault('args', [])
-        vocabulary_attr = f'vocabulary={repr(vocabulary_type)}'
+        facets = self.definition.setdefault("facets", {})
+        facets_args = facets.setdefault("args", [])
+        vocabulary_attr = f"vocabulary={repr(vocabulary_type)}"
         if not array_contains_value(facets_args, vocabulary_attr):
             facets_args.append(vocabulary_attr)
 
+        transformed_keys = []
+        for key in keys:
+            if isinstance(key, str) and key.startswith("props."):
+                transformed_keys.append(
+                    {"key": key, "model": {"type": "keyword"}, "target": key[6:]}
+                )
+            else:
+                transformed_keys.append(key)
+        self.definition["keys"] = transformed_keys
         super().prepare(context)
 
     def get_facet(self, stack, parent_path):
@@ -101,8 +108,8 @@ class VocabularyDataType(RelationDataType):
 class TaxonomyDataType(VocabularyDataType):
     model_type = "taxonomy"
     facets = {
-        'facet-class': "HierarchyVocabularyFacet",
-        'imports': [
+        "facet-class": "HierarchyVocabularyFacet",
+        "imports": [
             {"import": "oarepo_vocabularies.services.facets.HierarchyVocabularyFacet"}
         ],
     }

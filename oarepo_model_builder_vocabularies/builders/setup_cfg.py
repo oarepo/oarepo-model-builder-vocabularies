@@ -1,4 +1,3 @@
-
 from oarepo_model_builder.builders import OutputBuilder
 from oarepo_model_builder.outputs.cfg import CFGOutput
 
