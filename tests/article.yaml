@@ -1,6 +1,8 @@
 record:
   module:
     qualified: article
+  permissions:
+    presets: [everyone]
   properties:
     metadata:
       properties:
@@ -13,6 +15,10 @@ record:
           vocabulary-type: affiliations
           marshmallow:
             class: article.services.records.schema.AffiliationSchema
+        props:
+          type: vocabulary
+          vocabulary-type: languages
+          keys: [id, props.akey]
 plugins:
  builder:
   disable:

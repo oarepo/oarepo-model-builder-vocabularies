@@ -1,14 +1,20 @@
 import json
 import time
 
-import pytest
 from article.records.api import ArticleRecord
 from invenio_access.permissions import system_identity
 from invenio_vocabularies.records.api import Vocabulary
 
 
 def test_language_reference(
-    app, db, lang_type, lang_data, vocabulary_service, article_service, vocab_cf, search_clear
+    app,
+    db,
+    lang_type,
+    lang_data,
+    vocabulary_service,
+    article_service,
+    vocab_cf,
+    search_clear,
 ):
     vocabulary_service.create(system_identity, lang_data)
     Vocabulary.index.refresh()
@@ -24,7 +30,15 @@ def test_language_reference(
 
 
 def test_affiliation_hierarchy(
-    app, db, affiliation_type, lang_type, vocabulary_service, article_service, vocab_cf, client, search_clear
+    app,
+    db,
+    affiliation_type,
+    lang_type,
+    vocabulary_service,
+    article_service,
+    vocab_cf,
+    client,
+    search_clear,
 ):
     vocabulary_service.create(
         system_identity,
@@ -47,7 +61,13 @@ def test_affiliation_hierarchy(
 
     article = article_service.create(
         system_identity,
-        {"metadata": {"title": "blah", "language": {"id": "en"}, "affiliation": {"id": "uk-mff"}}},
+        {
+            "metadata": {
+                "title": "blah",
+                "language": {"id": "en"},
+                "affiliation": {"id": "uk-mff"},
+            }
+        },
     )
 
     assert article.data["metadata"]["affiliation"] == {
@@ -100,11 +120,14 @@ def test_affiliation_hierarchy(
 
     t1 = time.time()
     for i in range(100):
-        article_from_client = client.get(f'/article/', headers={'Accept': "application/vnd.inveniordm.v1+json"})
-        article_from_service_data = json.loads(article_from_client.data.decode('utf-8'))
+        article_from_client = client.get(
+            f"/article/", headers={"Accept": "application/vnd.inveniordm.v1+json"}
+        )
+        article_from_service_data = json.loads(article_from_client.data.decode("utf-8"))
         assert article_from_client.status_code == 200
     t2 = time.time()
     print(f"Single UI listing takes {(t2-t1)/100 * 1000} msecs")
+
 
 def test_facets(
     app,
@@ -115,7 +138,7 @@ def test_facets(
     vocabulary_service,
     article_service,
     vocab_cf,
-    search_clear
+    search_clear,
 ):
     with app.test_request_context(headers=[("Accept-Language", "en")]):
         vocabulary_service.create(system_identity, lang_data)
@@ -187,4 +210,25 @@ def test_facets(
                 ],
                 "label": "metadata/affiliation.label",
             },
+            "metadata_props": {"buckets": [], "label": "metadata/props.label"},
         }
+
+
+def test_props(
+    app,
+    db,
+    lang_type,
+    lang_data,
+    vocabulary_service,
+    article_service,
+    vocab_cf,
+    search_clear,
+):
+    vocabulary_service.create(system_identity, lang_data)
+    Vocabulary.index.refresh()
+
+    article = article_service.create(
+        system_identity, {"metadata": {"title": "blah", "props": {"id": "eng"}}}
+    )
+
+    assert article.data["metadata"]["props"]["akey"] == "avalue"
