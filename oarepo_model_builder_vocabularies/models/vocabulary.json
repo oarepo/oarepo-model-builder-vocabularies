@@ -5,7 +5,7 @@
     "marshmallow": {
       "generate": false,
       "class": "invenio_vocabularies.services.schema.BaseVocabularySchema",
-      "base-classes": ["InvenioBaseRecordSchema"],
+      "base-classes": ["invenio_records_resources.services.records.schema.BaseRecordSchema{InvenioBaseRecordSchema}"],
       "mapping": {}
     },
     "module": {
@@ -38,25 +38,15 @@
           "read": false,
           "write": false,
           "generate": false,
-          "field": "i18n_strings",
-          "field-class": "ma.fields.Nested",
+          "field": "{{invenio_vocabularies.services.schema.i18n_strings}}",
+          "field-class": "marshmallow.fields.Nested",
           "validators": [],
-          "class": "invenio_vocabularies.services.records.schema.DescriptionSchema",
-          "imports": [
-            {
-              "import": "invenio_vocabularies.services.schema.i18n_strings"
-            }
-          ]
+          "class": "invenio_vocabularies.services.records.schema.DescriptionSchema"
         },
         "ui": {
           "marshmallow": {
-            "field": "VocabularyI18nStrUIField()",
-            "generate": false,
-            "imports": [
-              {
-                "import": "oarepo_vocabularies.services.ui_schema.VocabularyI18nStrUIField"
-              }
-            ]
+            "field": "{{oarepo_vocabularies.services.ui_schema.VocabularyI18nStrUIField}}()",
+            "generate": false
           }
         },
         "type": "object",
@@ -74,7 +64,7 @@
         "marshmallow": {
           "read": false,
           "write": false,
-          "field-class": "ma.fields.String",
+          "field-class": "marshmallow.fields.String",
           "validators": [],
           "imports": []
         },
@@ -82,7 +72,7 @@
           "marshmallow": {
             "read": false,
             "write": false,
-            "field-class": "ma.fields.String",
+            "field-class": "marshmallow.fields.String",
             "validators": [],
             "imports": []
           }
@@ -93,7 +83,7 @@
         "marshmallow": {
           "read": false,
           "write": false,
-          "field-class": "ma.fields.String",
+          "field-class": "marshmallow.fields.String",
           "validators": [],
           "imports": []
         },
@@ -101,7 +91,7 @@
           "marshmallow": {
             "read": false,
             "write": false,
-            "field-class": "ma.fields.String",
+            "field-class": "marshmallow.fields.String",
             "validators": [],
             "imports": []
           }
@@ -123,22 +113,20 @@
           "read": false,
           "write": false,
           "generate": false,
-          "field": "ma.fields.Dict(allow_none=False, keys=fields.Str(), values=fields.Str())",
-          "field-class": "ma.fields.Nested",
+          "field": "{{marshmallow.fields.Dict}}(allow_none=False, keys=fields.Str(), values=fields.Str())",
+          "field-class": "marshmallow.fields.Nested",
           "validators": [],
-          "class": "invenio_vocabularies.services.records.schema.PropsSchema",
-          "imports": []
+          "class": "invenio_vocabularies.services.records.schema.PropsSchema"
         },
         "ui": {
           "marshmallow": {
             "read": false,
             "write": false,
             "generate": false,
-            "field": "ma.fields.Dict(allow_none=False, keys=fields.Str(), values=fields.Str())",
-            "field-class": "ma.fields.Nested",
+            "field": "{{marshmallow.fields.Dict}}(allow_none=False, keys=fields.Str(), values=fields.Str())",
+            "field-class": "marshmallow.fields.Nested",
             "validators": [],
-            "class": "invenio_vocabularies.services.records.schema.PropsSchema",
-            "imports": []
+            "class": "invenio_vocabularies.services.records.schema.PropsSchema"
           }
         },
         "type": "object",
@@ -154,25 +142,15 @@
           "read": false,
           "write": false,
           "generate": false,
-          "field": "i18n_strings",
-          "field-class": "ma.fields.Nested",
+          "field": "{{invenio_vocabularies.services.schema.i18n_strings}}",
+          "field-class": "marshmallow.fields.Nested",
           "validators": [],
-          "class": "invenio_vocabularies.services.records.schema.TitleSchema",
-          "imports": [
-            {
-              "import": "invenio_vocabularies.services.schema.i18n_strings"
-            }
-          ]
+          "class": "invenio_vocabularies.services.records.schema.TitleSchema"
         },
         "ui": {
           "marshmallow": {
-            "field": "VocabularyI18nStrUIField()",
-            "generate": false,
-            "imports": [
-              {
-                "import": "oarepo_vocabularies.services.ui_schema.VocabularyI18nStrUIField"
-              }
-            ]
+            "field": "{{oarepo_vocabularies.services.ui_schema.VocabularyI18nStrUIField}}()",
+            "generate": false
           }
         },
         "mapping": {
@@ -196,17 +174,15 @@
         "marshmallow": {
           "read": false,
           "write": false,
-          "field-class": "ma.fields.String",
-          "validators": [],
-          "imports": []
+          "field-class": "marshmallow.fields.String",
+          "validators": []
         },
         "ui": {
           "marshmallow": {
             "read": false,
             "write": false,
-            "field-class": "ma.fields.String",
-            "validators": [],
-            "imports": []
+            "field-class": "marshmallow.fields.String",
+            "validators": []
           }
         },
         "type": "keyword",
@@ -218,25 +194,15 @@
         "marshmallow": {
           "write": false,
           "read": true,
-          "field-class": "ma.fields.String",
-          "validators": ["lambda value: strptime(value, '%Y:%m:%d')"],
-          "imports": [
-            {
-              "import": "datetime.datetime.strptime"
-            }
-          ]
+          "field-class": "marshmallow.fields.String",
+          "validators": ["lambda value: {{datetime.datetime.strptime}}(value, '%Y:%m:%d')"]
         },
         "ui": {
           "marshmallow": {
             "write": false,
             "read": true,
-            "field-class": "ma.fields.String",
-            "validators": ["lambda value: strptime(value, '%Y:%m:%d')"],
-            "imports": [
-              {
-                "import": "datetime.datetime.strptime"
-              }
-            ]
+            "field-class": "marshmallow.fields.String",
+            "validators": ["lambda value: {{datetime.datetime.strptime}}(value, '%Y:%m:%d')"]
           }
         },
         "type": "date",
@@ -248,25 +214,15 @@
         "marshmallow": {
           "write": false,
           "read": true,
-          "field-class": "ma.fields.String",
-          "validators": ["lambda value: strptime(value, '%Y:%m:%d')"],
-          "imports": [
-            {
-              "import": "datetime.datetime.strptime"
-            }
-          ]
+          "field-class": "marhsmallow.fields.String",
+          "validators": ["lambda value: {{datetime.datetime.strptime}}(value, '%Y:%m:%d')"]
         },
         "ui": {
           "marshmallow": {
             "write": false,
             "read": true,
-            "field-class": "ma.fields.String",
-            "validators": ["lambda value: strptime(value, '%Y:%m:%d')"],
-            "imports": [
-              {
-                "import": "datetime.datetime.strptime"
-              }
-            ]
+            "field-class": "marhsmallow.fields.String",
+            "validators": ["lambda value: {{datetime.datetime.strptime}}(value, '%Y:%m:%d')"]
           }
         },
         "type": "date",
@@ -278,17 +234,15 @@
         "marshmallow": {
           "read": false,
           "write": false,
-          "field-class": "ma.fields.String",
-          "validators": [],
-          "imports": []
+          "field-class": "marhsmallow.fields.String",
+          "validators": []
         },
         "ui": {
           "marshmallow": {
             "read": false,
             "write": false,
-            "field-class": "ma.fields.String",
-            "validators": [],
-            "imports": []
+            "field-class": "marhsmallow.fields.String",
+            "validators": []
           }
         },
         "type": "keyword",
@@ -301,35 +255,31 @@
           "read": false,
           "write": false,
           "generate": false,
-          "field-class": "ma.fields.Nested",
+          "field-class": "marhsmallow.fields.Nested",
           "validators": [],
-          "class": "invenio_vocabularies.services.records.schema.PidSchema",
-          "imports": []
+          "class": "invenio_vocabularies.services.records.schema.PidSchema"
         },
         "ui": {
           "marshmallow": {
             "read": false,
             "write": false,
             "generate": false,
-            "field-class": "ma.fields.Nested",
+            "field-class": "marhsmallow.fields.Nested",
             "validators": [],
-            "class": "invenio_vocabularies.services.records.schema.PidSchema",
-            "imports": []
+            "class": "invenio_vocabularies.services.records.schema.PidSchema"
           }
         },
         "type": "object",
         "properties": {
           "pk": {
             "marshmallow": {
-              "field-class": "ma.fields.Integer",
-              "validators": [],
-              "imports": []
+              "field-class": "marhsmallow.fields.Integer",
+              "validators": []
             },
             "ui": {
               "marshmallow": {
-                "field-class": "ma.fields.Integer",
-                "validators": [],
-                "imports": []
+                "field-class": "marhsmallow.fields.Integer",
+                "validators": []
               }
             },
             "type": "integer",
@@ -337,15 +287,13 @@
           },
           "status": {
             "marshmallow": {
-              "field-class": "ma.fields.String",
-              "validators": [],
-              "imports": []
+              "field-class": "marhsmallow.fields.String",
+              "validators": []
             },
             "ui": {
               "marshmallow": {
-                "field-class": "ma.fields.String",
-                "validators": [],
-                "imports": []
+                "field-class": "marhsmallow.fields.String",
+                "validators": []
               }
             },
             "type": "keyword",
@@ -354,30 +302,26 @@
           },
           "pid_type": {
             "marshmallow": {
-              "field-class": "ma.fields.String",
-              "validators": [],
-              "imports": []
+              "field-class": "marhsmallow.fields.String",
+              "validators": []
             },
             "ui": {
               "marshmallow": {
-                "field-class": "ma.fields.String",
-                "validators": [],
-                "imports": []
+                "field-class": "marhsmallow.fields.String",
+                "validators": []
               }
             },
             "type": "keyword"
           },
           "obj_type": {
             "marshmallow": {
-              "field-class": "ma.fields.String",
-              "validators": [],
-              "imports": []
+              "field-class": "marhsmallow.fields.String",
+              "validators": []
             },
             "ui": {
               "marshmallow": {
-                "field-class": "ma.fields.String",
-                "validators": [],
-                "imports": []
+                "field-class": "marhsmallow.fields.String",
+                "validators": []
               }
             },
             "type": "keyword"
@@ -388,31 +332,27 @@
         "marshmallow": {
           "read": false,
           "write": false,
-          "field-class": "ma.fields.List",
-          "validators": [],
-          "imports": []
+          "field-class": "marhsmallow.fields.List",
+          "validators": []
         },
         "ui": {
           "marshmallow": {
             "read": false,
             "write": false,
-            "field-class": "ma.fields.List",
-            "validators": [],
-            "imports": []
+            "field-class": "marhsmallow.fields.List",
+            "validators": []
           }
         },
         "type": "array",
         "items": {
           "marshmallow": {
-            "field-class": "ma.fields.String",
-            "validators": [],
-            "imports": []
+            "field-class": "marhsmallow.fields.String",
+            "validators": []
           },
           "ui": {
             "marshmallow": {
-              "field-class": "ma.fields.String",
-              "validators": [],
-              "imports": []
+              "field-class": "marhsmallow.fields.String",
+              "validators": []
             }
           },
           "type": "keyword"
@@ -423,50 +363,44 @@
           "read": false,
           "write": false,
           "generate": false,
-          "field-class": "ma.fields.Nested",
+          "field-class": "marhsmallow.fields.Nested",
           "validators": [],
-          "class": "invenio_vocabularies.services.records.schema.TypeSchema",
-          "imports": []
+          "class": "invenio_vocabularies.services.records.schema.TypeSchema"
         },
         "ui": {
           "marshmallow": {
             "read": false,
             "write": false,
             "generate": false,
-            "field-class": "ma.fields.Nested",
+            "field-class": "marhsmallow.fields.Nested",
             "validators": [],
-            "class": "invenio_vocabularies.services.records.schema.TypeSchema",
-            "imports": []
+            "class": "invenio_vocabularies.services.records.schema.TypeSchema"
           }
         },
         "type": "object",
         "properties": {
           "id": {
             "marshmallow": {
-              "field-class": "ma.fields.String",
-              "validators": [],
-              "imports": []
+              "field-class": "marhsmallow.fields.String",
+              "validators": []
             },
             "ui": {
               "marshmallow": {
-                "field-class": "ma.fields.String",
-                "validators": [],
-                "imports": []
+                "field-class": "marhsmallow.fields.String",
+                "validators": []
               }
             },
             "type": "keyword"
           },
           "pid_type": {
             "marshmallow": {
-              "field-class": "ma.fields.String",
-              "validators": [],
-              "imports": []
+              "field-class": "marhsmallow.fields.String",
+              "validators": []
             },
             "ui": {
               "marshmallow": {
-                "field-class": "ma.fields.String",
-                "validators": [],
-                "imports": []
+                "field-class": "marhsmallow.fields.String",
+                "validators": []
               }
             },
             "type": "keyword"
