@@ -79,6 +79,7 @@ def test_affiliation_hierarchy(
                 {"en": "Faculty of Mathematics and Physics"},
                 {"en": "Charles University"},
             ],
+            "leaf": True,
             "parent": "uk",
         },
         "id": "uk-mff",

@@ -2,7 +2,9 @@
 
 set -e
 
-OAREPO_VERSION=${OAREPO_VERSION:-11}
+PYTHON=${PYTHON:-python3.10}
+
+OAREPO_VERSION=${OAREPO_VERSION:-12}
 
 if [ -d .venv-builder ] ; then
     rm -rf .venv-builder
@@ -10,7 +12,7 @@ fi
 
 rm -rf .venv-builder
 
-python3 -m venv .venv-builder
+${PYTHON} -m venv .venv-builder
 .venv-builder/bin/pip install -U setuptools pip wheel
 .venv-builder/bin/pip install -e .
 
@@ -25,7 +27,7 @@ mkdir built_tests
 ${BUILDER} tests/article.yaml --output-directory built_tests/article -vvv
 
 rm -rf .venv-tests
-python3 -m venv .venv-tests
+${PYTHON} -m venv .venv-tests
 
 source .venv-tests/bin/activate
 
