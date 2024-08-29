@@ -39,7 +39,7 @@ class VocabularyDataType(RelationDataType):
                     )
                 pid_field = f'Vocabulary.pid.with_type_ctx("{vocabulary_type}")'
                 vocabulary_imports.append(
-                    {"import": "invenio_vocabularies.records.api.Vocabulary"}
+                    {"import": "oarepo_vocabularies.records.api.Vocabulary"}
                 )
             else:
                 if vocabulary_type:
