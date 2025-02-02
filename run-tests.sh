@@ -2,7 +2,7 @@
 
 set -e
 
-PYTHON=${PYTHON:-python3.10}
+PYTHON=${PYTHON:-python3.12}
 
 OAREPO_VERSION=${OAREPO_VERSION:-12}
 
@@ -32,7 +32,7 @@ ${PYTHON} -m venv .venv-tests
 source .venv-tests/bin/activate
 
 pip install -U setuptools pip wheel
-pip install "oarepo[tests]==${OAREPO_VERSION}.*"
+pip install "oarepo[tests,rdm]==${OAREPO_VERSION}.*"
 pip install -e 'built_tests/article[tests]'
 
 pytest tests
