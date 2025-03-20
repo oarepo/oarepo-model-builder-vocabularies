@@ -37,7 +37,10 @@ class VocabularyDataType(RelationDataType):
                     raise InvalidModelException(
                         "{self.stack.path}: If vocabulary class is not specified, need to have vocabulary-type"
                     )
-                pid_field = f'Vocabulary.pid.with_type_ctx("{vocabulary_type}")'
+                if vocabulary_type in RDM_VOCABULARY_TYPES:
+                    pid_field = RDM_VOCABULARY_TYPES[vocabulary_type]
+                else:
+                    pid_field = f'Vocabulary.pid.with_type_ctx("{vocabulary_type}")'
                 vocabulary_imports.append(
                     {"import": "oarepo_vocabularies.records.api.Vocabulary"}
                 )
@@ -192,3 +195,4 @@ class TaxonomyDataType(VocabularyDataType):
 
 
 DATATYPES = [VocabularyDataType, TaxonomyDataType]
+RDM_VOCABULARY_TYPES = {"affiliations": "{{invenio_vocabularies.contrib.affiliations.api.Affiliation}}.pid", "funders": "{{invenio_vocabularies.contrib.funders.api.Funder}}.pid", "awards": "{{invenio_vocabularies.contrib.awards.api.Award}}.pid"}

@@ -66,7 +66,7 @@ def lang_type(app, db):
 @pytest.fixture()
 def affiliation_type(db):
     """Get an affiliation vocabulary type."""
-    v = VocabularyType.create(id="affiliations", pid_type="aff")
+    v = VocabularyType.create(id="institutions", pid_type="institutions")
     db.session.commit()
     return v
 

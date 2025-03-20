@@ -42,7 +42,7 @@ def test_affiliation_hierarchy(
 ):
     vocabulary_service.create(
         system_identity,
-        {"id": "uk", "type": "affiliations", "title": {"en": "Charles University"}},
+        {"id": "uk", "type": "institutions", "title": {"en": "Charles University"}},
     )
     vocabulary_service.create(
         system_identity,
@@ -52,7 +52,7 @@ def test_affiliation_hierarchy(
         system_identity,
         {
             "id": "uk-mff",
-            "type": "affiliations",
+            "type": "institutions",
             "title": {"en": "Faculty of Mathematics and Physics"},
             "hierarchy": {"parent": "uk"},
         },
@@ -145,13 +145,13 @@ def test_facets(
         vocabulary_service.create(system_identity, lang_data)
         vocabulary_service.create(
             system_identity,
-            {"id": "uk", "type": "affiliations", "title": {"en": "Charles University"}},
+            {"id": "uk", "type": "institutions", "title": {"en": "Charles University"}},
         )
         vocabulary_service.create(
             system_identity,
             {
                 "id": "uk-mff",
-                "type": "affiliations",
+                "type": "institutions",
                 "title": {"en": "Faculty of Mathematics and Physics"},
                 "hierarchy": {"parent": "uk"},
             },
