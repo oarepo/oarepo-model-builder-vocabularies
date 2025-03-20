@@ -21,7 +21,6 @@ class VocabularyDataType(RelationDataType):
     def prepare(self, context):
         vocabulary_type = self.definition.get("vocabulary-type", None)
         vocabulary_class = self.definition.pop("class", None)
-        pid_class = self.definition.pop("pid-class", None)
 
         vocabulary_imports = self.definition.setdefault("imports", [])
         self.definition.setdefault("model", "vocabularies")
