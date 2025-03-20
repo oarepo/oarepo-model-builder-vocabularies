@@ -12,7 +12,7 @@ record:
           vocabulary-type: languages
         affiliation:
           type: taxonomy
-          vocabulary-type: affiliations
+          vocabulary-type: institutions
           marshmallow:
             class: article.services.records.schema.AffiliationSchema
         props:
