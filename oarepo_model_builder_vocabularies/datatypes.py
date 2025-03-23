@@ -17,10 +17,13 @@ class VocabularyDataType(RelationDataType):
         vocabulary_type = ma.fields.String(
             attribute="vocabulary-type", data_key="vocabulary-type"
         )
+        vocabulary_class = ma.fields.String(attribute="vocabulary-class", data_key="vocabulary-class")
+        model = fields.String(required=False)
+
 
     def prepare(self, context):
         vocabulary_type = self.definition.get("vocabulary-type", None)
-        vocabulary_class = self.definition.pop("class", None)
+        vocabulary_class = self.definition.get("vocabulary-class", None)
 
         vocabulary_imports = self.definition.setdefault("imports", [])
         self.definition.setdefault("model", "vocabularies")
@@ -100,13 +103,7 @@ class VocabularyDataType(RelationDataType):
             label,
             serialized_args,
         )
-
-    class ModelSchema(RelationDataType.ModelSchema):
-        vocabulary_type = fields.String(
-            attribute="vocabulary-type", data_key="vocabulary-type", required=False
-        )
-        model = fields.String(required=False)
-
+        
 
 class TaxonomyDataType(VocabularyDataType):
     model_type = "taxonomy"
