@@ -17,6 +17,8 @@ class VocabularyDataType(RelationDataType):
         vocabulary_type = ma.fields.String(
             attribute="vocabulary-type", data_key="vocabulary-type"
         )
+        vocabulary_class = ma.fields.String(attribute="vocabulary-class", data_key="vocabulary-class")
+
 
     def prepare(self, context):
         vocabulary_type = self.definition.get("vocabulary-type", None)
